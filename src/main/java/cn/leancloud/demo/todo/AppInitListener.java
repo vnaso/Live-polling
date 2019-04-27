@@ -1,17 +1,16 @@
 package cn.leancloud.demo.todo;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.servlet.annotation.WebListener;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
+import cn.leancloud.LeanEngine;
+import cn.leancloud.demo.task.LivePolling;
 import com.avos.avoscloud.AVCloud;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.internal.impl.JavaRequestSignImplementation;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import cn.leancloud.LeanEngine;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
 
 @WebListener
 public class AppInitListener implements ServletContextListener {
@@ -44,5 +43,6 @@ public class AppInitListener implements ServletContextListener {
     // AVOSCloud.setDebugLogEnabled(true);
     // 向云引擎注册云函数
     LeanEngine.register(Cloud.class);
+    LeanEngine.register(LivePolling.class);
   }
 }
