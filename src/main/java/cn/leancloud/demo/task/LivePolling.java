@@ -15,6 +15,7 @@ import java.util.List;
 public class LivePolling {
     private static final MessageHandler messageHandler = new MessageHandler();
     private static final Logger logger = LogManager.getLogger(AppInitListener.class);
+
     @EngineFunction("poll")
     public static void poll() {
         AVQuery<Source> query = new AVQuery<>("Source");
@@ -23,15 +24,20 @@ public class LivePolling {
         try {
             sourceList = query.find();
         } catch (AVException e) {
-            logger.error("查询sourceL失败",e);
+            logger.error("查询source失败", e);
             e.printStackTrace();
         }
+        if (sourceList == null) {
+            logger.info("查询source失败");
+            return;
+        }
+
         List<LiveMessage> messageList = new ArrayList<>(sourceList.size());
         // 获取最新直播间状态
         for (Source source : sourceList) {
             JSONObject data = UrlTool.getJsonByUrl(source.getApiLink());
-            LiveMessage message = messageHandler.getLiveMessage(data, source.getCategoryId(),source.getObjectId());
-            if(message!=null){
+            LiveMessage message = messageHandler.getLiveMessage(data, source.getCategoryId(), source.getObjectId());
+            if (message != null) {
                 messageList.add(message);
             }
         }
@@ -39,7 +45,7 @@ public class LivePolling {
         try {
             MessageHandler.saveLiveMessage(messageList);
         } catch (AVException e) {
-            logger.error("批量更新消息失败",e);
+            logger.error("批量更新消息失败", e);
             e.printStackTrace();
         }
 

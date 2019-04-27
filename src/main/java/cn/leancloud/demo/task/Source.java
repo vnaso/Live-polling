@@ -4,7 +4,7 @@ import com.avos.avoscloud.AVClassName;
 import com.avos.avoscloud.AVObject;
 
 @AVClassName("Source")
-public class Source extends AVObject {
+public class Source extends AVObject{
 
     public String getApiLink() {
         return getString("apiLink");

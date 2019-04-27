@@ -1,7 +1,9 @@
 package cn.leancloud.demo.todo;
 
 import cn.leancloud.LeanEngine;
+import cn.leancloud.demo.task.Live;
 import cn.leancloud.demo.task.LivePolling;
+import cn.leancloud.demo.task.Source;
 import com.avos.avoscloud.AVCloud;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.internal.impl.JavaRequestSignImplementation;
@@ -31,6 +33,8 @@ public class AppInitListener implements ServletContextListener {
     logger.info("LeanEngine app init.");
     // 注册子类化
     AVObject.registerSubclass(Todo.class);
+    AVObject.registerSubclass(Source.class);
+    AVObject.registerSubclass(Live.class);
 
     if ("development".equals(appEnv) && "true".equals(haveStaging) || "stage".equals(appEnv)) {
       AVCloud.setProductionMode(false);
