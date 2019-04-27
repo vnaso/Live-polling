@@ -3,7 +3,7 @@ package cn.leancloud.demo.task;
 import com.avos.avoscloud.AVClassName;
 import com.avos.avoscloud.AVObject;
 
-@AVClassName("Todo")
+@AVClassName("Source")
 public class Source extends AVObject {
 
     public String getApiLink() {
