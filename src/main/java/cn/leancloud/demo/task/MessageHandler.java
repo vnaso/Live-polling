@@ -56,6 +56,10 @@ public class MessageHandler {
             // douyu 直播
             return getDouyuMessage(jsonObject, "斗鱼直播", objId);
         }
+        if (categoryId == 202) {
+            // CC 直播
+            return getCCMessage(jsonObject, "CC直播", objId, url);
+        }
         return null;
     }
 
@@ -107,6 +111,15 @@ public class MessageHandler {
         return message;
     }
 
+    /**
+     * Category 202
+     *
+     * @param jsonObject 根据 api 获得的 json 数据
+     * @param name       直播站点名称
+     * @param objId      订阅源的 ObjectId
+     * @param url        订阅源的 URL, 用来定位 CC 直播间信息
+     * @return 封装好的 LiveMessage
+     */
     private LiveMessage getCCMessage(JSONObject jsonObject, String name, String objId, String url) {
         LiveMessage message = new LiveMessage();
         String uid = url.substring(url.lastIndexOf("=") + 1);
