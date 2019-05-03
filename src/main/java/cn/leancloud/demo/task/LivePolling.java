@@ -36,7 +36,7 @@ public class LivePolling {
         // 获取最新直播间状态
         for (Source source : sourceList) {
             JSONObject data = UrlTool.getJsonByUrl(source.getApiLink());
-            LiveMessage message = messageHandler.getLiveMessage(data, source.getCategoryId(), source.getObjectId());
+            LiveMessage message = messageHandler.getLiveMessage(data, source.getCategoryId(), source.getObjectId(), source.getApiLink());
             if (message != null) {
                 messageList.add(message);
             }

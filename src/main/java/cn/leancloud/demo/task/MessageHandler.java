@@ -43,7 +43,8 @@ public class MessageHandler {
         return result;
     }
 
-    public LiveMessage getLiveMessage(JSONObject jsonObject, int categoryId, String objId) {
+
+    public LiveMessage getLiveMessage(JSONObject jsonObject, int categoryId, String objId, String url) {
         if (jsonObject == null) {
             return null;
         }
@@ -58,6 +59,16 @@ public class MessageHandler {
         return null;
     }
 
+    /**
+     * CategoryId = 200
+     * 获取 Bilibili 直播间信息
+     * api 格式为: https://api.live.bilibili.com/room/v1/Room/getRoomInfoOld?mid=${uid}
+     *
+     * @param jsonObject 根据 api 获得的 json 数据
+     * @param name       直播站点名称
+     * @param objId      订阅源的 ObjectId
+     * @return 封装好的 LiveMessage
+     */
     private LiveMessage getBilibiliMessage(JSONObject jsonObject, String name, String objId) {
         LiveMessage message = new LiveMessage();
         JSONObject data = jsonObject.getJSONObject("data");
@@ -70,6 +81,16 @@ public class MessageHandler {
         return message;
     }
 
+    /**
+     * CategoryId = 201
+     * 获取斗鱼直播间的信息
+     * api 格式为: https://yuba.douyu.com/wbapi/web/group/getLiveInfo?uid=${鱼吧获取的uid}
+     *
+     * @param jsonObject 根据 api 获得的 json 数据
+     * @param name       直播站点名称
+     * @param objId      订阅源的 ObjectId
+     * @return 封装好的 LiveMessage
+     */
     private LiveMessage getDouyuMessage(JSONObject jsonObject, String name, String objId) {
         LiveMessage message = new LiveMessage();
         JSONObject data = jsonObject.getJSONObject("data");
@@ -83,6 +104,17 @@ public class MessageHandler {
             message.setLiveStatus(0);
         }
         message.setId(objId);
+        return message;
+    }
+
+    private LiveMessage getCCMessage(JSONObject jsonObject, String name, String objId, String url) {
+        LiveMessage message = new LiveMessage();
+        String uid = url.substring(url.lastIndexOf("=") + 1);
+        JSONObject data = jsonObject.getJSONObject("data").getJSONObject(uid);
+        message.setCode(200);
+        message.setMsg("无");
+        message.setTitle(data.getString("nickname") + " - " + name);
+        message.setLiveStatus(data.getIntValue("is_live") == 1 ? 1 : 0);
         return message;
     }
 }
