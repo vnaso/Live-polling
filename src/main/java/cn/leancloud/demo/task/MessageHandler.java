@@ -128,6 +128,7 @@ public class MessageHandler {
         message.setMsg("无");
         message.setTitle(data.getString("nickname") + " - " + name);
         message.setLiveStatus(data.getIntValue("is_live") == 1 ? 1 : 0);
+        message.setId(objId);
         return message;
     }
 }
