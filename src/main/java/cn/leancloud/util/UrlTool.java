@@ -6,7 +6,9 @@ import org.apache.logging.log4j.Logger;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class UrlTool {
@@ -55,5 +57,20 @@ public class UrlTool {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static Map<String,String> kv2Map(String data){
+        Map<String,String> dataMap = new HashMap<>(32);
+        String[] rst = data.split("\n");
+        for (String s : rst) {
+            String[] a = s.split(":");
+            dataMap.put(a[0].trim(),a[1].trim());
+        }
+        return dataMap;
+    }
+
+    public static List<String> parseIpList(String ipList){
+        String[] data = ipList.split(",");
+        return Arrays.asList(data);
     }
 }

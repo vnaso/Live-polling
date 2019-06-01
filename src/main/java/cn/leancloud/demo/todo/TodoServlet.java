@@ -1,18 +1,17 @@
 package cn.leancloud.demo.todo;
 
-import java.io.IOException;
-import java.util.ArrayList;
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.AVQuery;
+import com.avos.avoscloud.AVUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.avos.avoscloud.AVException;
-import com.avos.avoscloud.AVObject;
-import com.avos.avoscloud.AVQuery;
-import com.avos.avoscloud.AVUtils;
+import java.io.IOException;
+import java.util.ArrayList;
 
 @WebServlet(name = "AppServlet", urlPatterns = { "/todos" })
 public class TodoServlet extends HttpServlet {
