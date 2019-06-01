@@ -29,21 +29,11 @@ public class AirportAutoCheckin {
     private final static String checkinUrl = "https://www.cordcloud.cc/user/checkin";
     private static final Logger logger = LogManager.getLogger(AppInitListener.class);
 
-    @EngineFunction("getList")
     public static List<String> getProxyList() throws AVException {
         AVQuery<IpProxy> query = new AVQuery<>("IpProxy");
         query.whereNotEqualTo("proxyList","");
         IpProxy ipProxy = query.getFirst();
         return UrlTool.parseIpList(ipProxy.getProxyList());
-    }
-
-    @EngineFunction("List")
-    public static String getList() throws AVException {
-        AVQuery<IpProxy> query = new AVQuery<>("IpProxy");
-        query.whereNotEqualTo("proxyList","");
-        IpProxy ipProxy = query.getFirst();
-        return ipProxy.getProxyList();
-        // return UrlTool.parseIpList(ipProxy.getProxyList()).toString();
     }
 
     @EngineFunction("checkin")
