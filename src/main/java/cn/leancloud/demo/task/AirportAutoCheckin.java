@@ -5,6 +5,8 @@ import cn.leancloud.EngineFunctionParam;
 import cn.leancloud.common.Const;
 import cn.leancloud.demo.todo.AppInitListener;
 import cn.leancloud.util.UrlTool;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVQuery;
 import org.apache.logging.log4j.Level;
@@ -12,6 +14,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
+import org.jsoup.helper.StringUtil;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -29,7 +32,7 @@ public class AirportAutoCheckin {
     private final static String checkinUrl = "https://www.cordcloud.cc/user/checkin";
     private static final Logger logger = LogManager.getLogger(AppInitListener.class);
 
-    public static List<String> getProxyList() throws AVException {
+    private static List<String> getProxyList() throws AVException {
         AVQuery<IpProxy> query = new AVQuery<>("IpProxy");
         query.whereNotEqualTo("proxyList","");
         IpProxy ipProxy = query.getFirst();
@@ -59,6 +62,7 @@ public class AirportAutoCheckin {
                 .data(data);
         Connection checkin = Jsoup.connect(checkinUrl)
                 .method(Connection.Method.POST);
+        // 循环切换 proxy 签到
         boolean checked = false;
         Connection.Response rst = null;
         for (String proxy : proxyList) {
@@ -80,8 +84,14 @@ public class AirportAutoCheckin {
             break;
         }
         if(checked && rst != null){
-            UrlTool.sendMessageViaServerChan(Const.SCKEY,"自动签到成功",rst.body());
-            logger.log(Level.INFO,"发送消息: " + rst.body());
+            String str = rst.body();
+            JSONObject obj = JSON.parseObject(str);
+            String msg = obj.getString("msg");
+            if(StringUtil.isBlank(msg)){
+                msg = rst.body();
+            }
+            UrlTool.sendMessageViaServerChan(Const.SCKEY,"自动签到成功",msg);
+            logger.log(Level.INFO,"发送消息: " + msg);
         }else{
             UrlTool.sendMessageViaServerChan(Const.SCKEY,"自动签到失败","所有代理均失败, 请更新代理");
         }
