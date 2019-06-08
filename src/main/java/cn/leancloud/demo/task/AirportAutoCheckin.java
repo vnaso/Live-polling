@@ -30,6 +30,7 @@ import java.util.Map;
 public class AirportAutoCheckin {
     private final static  String loginUrl = "https://www.cordcloud.cc/auth/login";
     private final static String checkinUrl = "https://www.cordcloud.cc/user/checkin";
+    private static int checkState = 0;
     private static final Logger logger = LogManager.getLogger(AppInitListener.class);
 
     private static List<String> getProxyList() throws AVException {
@@ -42,6 +43,19 @@ public class AirportAutoCheckin {
     @EngineFunction("checkin")
     public static void doCheckin(@EngineFunctionParam("email")String email,
                                  @EngineFunctionParam("passwd")String passwd){
+        // 自动签到控制
+        if(checkState == Const.CheckState.CHECKED.getCode()){
+            logger.log(Level.INFO,"已签到, 不再重复执行");
+            return;
+        }
+        else if(checkState == Const.CheckState.CHECKING.getCode()){
+            logger.log(Level.INFO, "签到中");
+        }
+        else if(checkState == Const.CheckState.UNCHECKED.getCode()){
+            logger.log(Level.INFO, "开始签到");
+            checkState = Const.CheckState.CHECKING.getCode();
+        }
+        // 获取 proxy 列表
         List<String> proxyList = null;
         try {
             proxyList = getProxyList();
@@ -57,13 +71,13 @@ public class AirportAutoCheckin {
         data.put("email", email);
         data.put("passwd", passwd);
         Map<String, String> cookies = null;
+        // 创建链接
         Connection login = Jsoup.connect(loginUrl)
                 .method(Connection.Method.POST)
                 .data(data);
         Connection checkin = Jsoup.connect(checkinUrl)
                 .method(Connection.Method.POST);
         // 循环切换 proxy 签到
-        boolean checked = false;
         Connection.Response rst = null;
         for (String proxy : proxyList) {
             String ip = proxy.split(":")[0];
@@ -80,10 +94,10 @@ public class AirportAutoCheckin {
                 continue;
             }
             logger.log(Level.INFO,"自动签到执行成功");
-            checked = true;
+            checkState = Const.CheckState.CHECKED.getCode();
             break;
         }
-        if(checked && rst != null){
+        if(checkState == Const.CheckState.CHECKED.getCode() && rst != null){
             String str = rst.body();
             JSONObject obj = JSON.parseObject(str);
             String msg = obj.getString("msg");
@@ -92,7 +106,8 @@ public class AirportAutoCheckin {
             }
             UrlTool.sendMessageViaServerChan(Const.SCKEY,"自动签到成功",msg);
             logger.log(Level.INFO,"发送消息: " + msg);
-        }else{
+        }
+        else{
             UrlTool.sendMessageViaServerChan(Const.SCKEY,"自动签到失败","所有代理均失败, 请更新代理");
         }
     }
