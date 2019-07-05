@@ -42,7 +42,8 @@ public class AirportAutoCheckin {
 
     @EngineFunction("checkin")
     public static void doCheckin(@EngineFunctionParam("email")String email,
-                                 @EngineFunctionParam("passwd")String passwd){
+                                 @EngineFunctionParam("passwd")String passwd,
+                                 @EngineFunctionParam("notify")boolean notify){
         // 自动签到控制
         if(checkState == Const.CheckState.CHECKED.getCode()){
             logger.log(Level.INFO,"已签到, 不再重复执行");
@@ -104,8 +105,11 @@ public class AirportAutoCheckin {
             if(StringUtil.isBlank(msg)){
                 msg = rst.body();
             }
-            UrlTool.sendMessageViaServerChan(Const.SCKEY,"自动签到成功",msg);
-            logger.log(Level.INFO,"发送消息: " + msg);
+            // 控制是否发送消息
+            if (notify) {
+                UrlTool.sendMessageViaServerChan(Const.SCKEY,"自动签到成功",msg);
+                logger.log(Level.INFO,"发送消息: " + msg);
+            }
         }
         else{
             UrlTool.sendMessageViaServerChan(Const.SCKEY,"自动签到失败","所有代理均失败, 请更新代理");
