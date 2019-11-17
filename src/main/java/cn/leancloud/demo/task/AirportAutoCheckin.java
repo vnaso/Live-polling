@@ -129,7 +129,7 @@ public class AirportAutoCheckin {
         boolean checked = false;
         // login
         HttpResponse loginRst;
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 3; i++) {
             try {
                 Thread.sleep(10 * 1000);
                 loginRst = HttpRequest.post(loginUrl)
@@ -139,12 +139,12 @@ public class AirportAutoCheckin {
                         .form("code", "")
                         .execute();
                 if (loginRst == null) {
-                    logger.log(Level.ERROR, "登录错误。");
+                    logger.log(Level.ERROR, "login error");
                     continue;
                 }
 
                 if (loginRst.getStatus() != 200) {
-                    logger.log(Level.ERROR, "登录失败。");
+                    logger.log(Level.ERROR, "login failed");
                     continue;
                 }
 
@@ -157,13 +157,13 @@ public class AirportAutoCheckin {
                         .execute();
 
                 if (checkinRst == null) {
-                    logger.log(Level.ERROR, "签到错误。");
+                    logger.log(Level.ERROR, "checkin error");
                     continue;
                 }
 
-                logger.log(Level.INFO, "签到信息：" + checkinRst.body());
+                logger.log(Level.INFO, "checkin info：" + checkinRst.body());
                 if (checkinRst.getStatus() != 200) {
-                    System.out.println("签到失败。");
+                    System.out.println("checkin failed");
                     continue;
                 }
                 checked = true;
@@ -175,12 +175,12 @@ public class AirportAutoCheckin {
             }
         }
         if(checked) {
-            logger.log(Level.INFO, "签到成功。");
+            logger.log(Level.INFO, "checkin success");
         }else{
             if(notify){
                 UrlTool.sendMessageViaServerChan(Const.SCKEY,"自动签到失败。","失败了失败了失败了");
             }
-            logger.log(Level.ERROR, "自动签到失败");
+            logger.log(Level.ERROR, "auto checkin failed");
         }
     }
 }
