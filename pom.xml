@@ -8,20 +8,36 @@
 	<packaging>war</packaging>
 
 	<name>java-war-getting-started</name>
-
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
-		<jettyVersion>9.4.11.v20180605</jettyVersion>
-	</properties>
+    
+    
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <jettyVersion>9.4.11.v20180605</jettyVersion>
+    </properties>
 
 	<dependencies>
-		<dependency>
-			<groupId>cn.leancloud</groupId>
-			<artifactId>leanengine</artifactId>
-			<version>0.2.5</version>
-		</dependency>
+        <dependency>
+            <groupId>cn.leancloud</groupId>
+            <artifactId>leanengine</artifactId>
+            <version>0.3.3</version>
+        </dependency>
+        <!--<dependency>-->
+        <!--    <groupId>cn.leancloud</groupId>-->
+        <!--    <artifactId>storage-core</artifactId>-->
+        <!--    <version>6.0.3</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+        <!--    <groupId>cn.leancloud.android</groupId>-->
+        <!--    <artifactId>avoscloud-sdk</artifactId>-->
+        <!--    <version>4.7.15</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+        <!--    <groupId>cn.leancloud</groupId>-->
+        <!--    <artifactId>engine-core</artifactId>-->
+        <!--    <version>5.0.23</version>-->
+        <!--</dependency>-->
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-api</artifactId>
