@@ -119,7 +119,7 @@ public class AirportAutoCheckin {
     }
 
     @EngineFunction("checkinWithoutProxy")
-    public void checkinWithoutProxy(@EngineFunctionParam("email") String email,
+    public static void checkinWithoutProxy(@EngineFunctionParam("email") String email,
                                     @EngineFunctionParam("passwd") String passwd,
                                     @EngineFunctionParam("notify") boolean notify,
                                     @EngineFunctionParam("loginUrl") String loginUrl,
