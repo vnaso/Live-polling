@@ -167,6 +167,7 @@ public class AirportAutoCheckin {
                     continue;
                 }
                 checked = true;
+                break;
             } catch (IORuntimeException ioEx) {
                 logger.log(Level.ERROR, ioEx.getMessage());
             } catch (InterruptedException e) {
